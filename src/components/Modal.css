@@ -1,0 +1,79 @@
+/* Background overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Dimmed background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fade-in 0.5s ease; /* Fade-in animation */
+  }
+  
+  /* Modal content styling */
+  .modal-content {
+    background: white;
+    padding: 30px; /* Add padding */
+    border-radius: 15px; /* Rounded corners */
+    width: 80%; /* Responsive width */
+    max-width: 600px; /* Maximum width */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    position: relative;
+    animation: scale-up 0.4s ease; /* Scale-up animation */
+  }
+  
+  /* Heading inside the modal */
+  .modal-content h2 {
+    margin-top: 0; /* Remove margin above heading */
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Paragraph styling */
+  .modal-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+  }
+  
+  /* Close button styling */
+  .modal-content button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-content button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Keyframes for fade-in animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Keyframes for scale-up animation */
+  @keyframes scale-up {
+    from {
+      transform: scale(0.8);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  
