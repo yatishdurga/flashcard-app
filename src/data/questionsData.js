@@ -3,21 +3,23 @@ export const questionsData = {
 
       
       {question: "Explain the concept of supervised learning and how it is used in data science?",
-        answer: "Supervised learning is a type of machine learning where the model is trained on labeled data, meaning that each training example has a corresponding label or outcome. For example, in spam detection, the training data consists of emails and their labels (spam or not spam). The model learns patterns to predict the label for unseen data."},
-      {question: "How does cross-validation help in evaluating machine learning models?",
-      answer: "Cross-validation involves splitting the dataset into multiple folds and training the model on some folds while testing it on the remaining. This process is repeated several times to ensure the model's performance is consistent and not dependent on a single train-test split."},      
-      { question: "What is supervised learning?", answer: "Supervised learning is when a model learns from labeled data." },
-      { question: "Define overfitting.", answer: "Overfitting occurs when a model performs well on training data but poorly on unseen data." },
-      { question: "What is unsupervised learning?", answer: "Unsupervised learning is when a model learns patterns from unlabeled data." },
-      { question: "What is a decision tree?", answer: "A decision tree is a flowchart-like structure used for classification and regression tasks." },
-      { question: "Explain cross-validation.", answer: "Cross-validation is a technique to evaluate the performance of a model by dividing data into training and testing sets." }
+        answer: "Supervised learning is a type of machine learning where the model is trained on labeled data, meaning that each training example has a corresponding label or outcome. For example, in spam detection, the training data consists of emails and their labels (spam or not spam). The model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the labelThe model learns patterns to predict the label for unseen data.",
+        company: "Google"},
+        {question: "How does cross-validation help in evaluating machine learning models?",
+      answer: "Cross-validation involves splitting the dataset into multiple folds and training the model on some folds while testing it on the remaining. This process is repeated several times to ensure the model's performance is consistent and not dependent on a single train-test split.",
+      company: "Amazon"},      
+      { question: "What is supervised learning?", answer: "Supervised learning is when a model learns from labeled data.",company: "Amazon" },
+      { question: "Define overfitting.", answer: "Overfitting occurs when a model performs well on training data but poorly on unseen data.",company: "Google" },
+      { question: "What is unsupervised learning?", answer: "Unsupervised learning is when a model learns patterns from unlabeled data.",company: "Meta" },
+      { question: "What is a decision tree?", answer: "A decision tree is a flowchart-like structure used for classification and regression tasks.",company: "Netflix" },
+      { question: "Explain cross-validation.", answer: "Cross-validation is a technique to evaluate the performance of a model by dividing data into training and testing sets.",company: "Google" }
     ],
     "Deep Learning": [
-      { question: "What is a neural network?", answer: "A neural network is a series of algorithms that simulate the human brain." },
-      { question: "Explain backpropagation.", answer: "Backpropagation is an algorithm for training neural networks by adjusting weights based on errors." },
-      { question: "What is a convolutional neural network (CNN)?", answer: "CNNs are a type of deep learning model used for image processing tasks." },
-      { question: "What is dropout?", answer: "Dropout is a regularization technique that prevents overfitting by randomly setting some neurons' outputs to zero during training." },
-      { question: "Define ReLU activation function.", answer: "ReLU stands for Rectified Linear Unit and is used to introduce non-linearity in neural networks." }
+      { question: "What is a neural network?", answer: "A neural network is a series of algorithms that simulate the human brain.",company: "Amazon" },
+      { question: "Explain backpropagation.", answer: "Backpropagation is an algorithm for training neural networks by adjusting weights based on errors.",company: "Google" },
+      { question: "What is a convolutional neural network (CNN)?", answer: "CNNs are a type of deep learning model used for image processing tasks.",company: "AmazNetflixon" },
+      { question: "What is dropout?", answer: "Dropout is a regularization technique that prevents overfitting by randomly setting some neurons' outputs to zero during training.",company: "Apple" },
+      { question: "Define ReLU activation function.", answer: "ReLU stands for Rectified Linear Unit and is used to introduce non-linearity in neural networks.",company: "Amazon"}
     ],
     "Statistics": [
       { question: "What is a p-value?", answer: "The p-value measures the strength of evidence against a null hypothesis." },

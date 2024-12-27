@@ -1,3 +1,4 @@
+/* General Body Styling */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -5,40 +6,13 @@ body {
   background-color: #f4f4f4;
 }
 
+/* Dropdown Styling */
 select {
   padding: 10px;
   margin-bottom: 20px;
 }
-.button-container {
-  display: flex;
-  justify-content: center; /* Center the buttons */
-  margin-top: 20px;
-  gap: 10px; /* Add space between the buttons */
-}
 
-button {
-  margin: 0;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-
-
-/* mark as read */
+/* Button Container */
 .button-container {
   display: flex;
   justify-content: center;
@@ -46,6 +20,7 @@ button:disabled {
   gap: 10px;
 }
 
+/* Default Button Styling */
 button {
   padding: 10px 20px;
   background-color: #007bff;
@@ -53,11 +28,12 @@ button {
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #0056b3;
+  transform: scale(1.05); /* Subtle hover effect */
 }
 
 button:disabled {
@@ -65,6 +41,34 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Mark as Read Button */
+.mark-read-button {
+  background-color: white;
+  color: #007bff;
+  border: 2px solid #007bff;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.mark-read-button:hover {
+  background-color: #007bff;
+  color: white;
+  transform: scale(1.05); /* Subtle hover effect */
+}
+
+/* Completed Button */
+.completed-button {
+  background-color: #28a745; /* Green for completed questions */
+  color: white;
+  border: 2px solid #28a745;
+  cursor: not-allowed; /* Indicate that it’s disabled */
+  transition: all 0.3s ease;
+}
+
+.completed-button:hover {
+  background-color: #28a745; /* No hover effect for completed button */
+}
+
+/* Achievement Banner */
 .achievement-banner {
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
   padding: 15px;
@@ -76,14 +80,7 @@ button:disabled {
   animation: pop-in 0.6s ease;
 }
 
-.completed-status {
-  color: gold;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 10px;
-}
-
+/* Reset Button */
 .reset-button {
   margin-top: 20px;
   padding: 10px 20px;
@@ -92,19 +89,23 @@ button:disabled {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .reset-button:hover {
   background-color: #e55a50;
+  transform: scale(1.05); /* Subtle hover effect */
 }
 
+/* Flashcard Styling for Read State */
 .flashcard.read {
   border: 2px solid gold;
   background: #fdf5e6; /* Light gold for read cards */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
+/* Pop-in Animation */
 @keyframes pop-in {
   from {
     transform: scale(0.8);
@@ -114,5 +115,23 @@ button:disabled {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.flashcard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 150px); /* Adjust based on the header and footer size */
 }
 

@@ -20,6 +20,7 @@ const App = () => {
     q.question.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Define currentQuestion
   const currentQuestion = filteredQuestions[currentIndex];
 
   // Mark the current question as read
@@ -94,17 +95,24 @@ const App = () => {
       )}
       {currentQuestion ? (
         <>
-          <FlashCard
+           <FlashCard
             question={currentQuestion.question}
             answer={currentQuestion.answer}
-            isRead={readQuestions.includes(currentIndex)} // Pass if the question is read
-            onViewDetails={() => openModal(currentQuestion)} // Pass content to modal
+            company={currentQuestion.company} // Pass the company field
+            onViewDetails={() => openModal(currentQuestion)}
           />
+
           <div className="button-container">
             <button onClick={handleBack} disabled={currentIndex === 0}>
               Back
             </button>
-            <button onClick={markAsRead}>Mark as Read</button>
+            <button
+              onClick={markAsRead}
+              className={readQuestions.includes(currentIndex) ? "completed-button" : "mark-read-button"}
+              disabled={readQuestions.includes(currentIndex)} // Disable if already marked as read
+            >
+              {readQuestions.includes(currentIndex) ? "Completed" : "Mark as Read"}
+            </button>
             <button
               onClick={handleNext}
               disabled={currentIndex === filteredQuestions.length - 1}
