@@ -4,12 +4,72 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for Dark Mode */
+}
+
+/* Dark Mode Styling */
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #f4f4f4;
+}
+
+/* App Container */
+.app {
+  padding: 20px;
+}
+
+/* Dark Mode App Styling */
+.app.dark-mode {
+  background-color: #1a1a1a;
+  color: #f4f4f4;
+}
+
+/* Header Styling */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dark-mode-toggle:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* Subtle hover effect */
+}
+
+.dark-mode .dark-mode-toggle {
+  background-color: #444;
+  color: #f4f4f4;
+}
+
+.dark-mode .dark-mode-toggle:hover {
+  background-color: #333;
 }
 
 /* Dropdown Styling */
 select {
   padding: 10px;
   margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode select {
+  background-color: #333;
+  color: #f4f4f4;
+  border: 1px solid #555;
 }
 
 /* Button Container */
@@ -128,10 +188,3 @@ button:disabled {
     margin-bottom: 10px;
   }
 }
-.flashcard-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 150px); /* Adjust based on the header and footer size */
-}
-
