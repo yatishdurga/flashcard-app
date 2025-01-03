@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { questionsData } from './data/questionsData';
+import TopicCard from './components/TopicCard'; // Import TopicCard for topic selection
 import Header from './components/HeaderFooter/Header'; // Import Header component
 import Footer from './components/HeaderFooter/Footer'; // Import Footer component
 import FlashCard from './components/FlashCard';
@@ -9,154 +10,134 @@ import Modal from './components/Modal';
 import './App.css';
 
 const App = () => {
-  // State to track Dark Mode
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // Dark mode state
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [currentTopic, setCurrentTopic] = useState(null); // Current topic state
+  const [currentIndex, setCurrentIndex] = useState(0); // Current question index
+  const [readQuestions, setReadQuestions] = useState([]); // Read questions state
+  const [achievements, setAchievements] = useState([]); // Achievements state
+  const [isModalOpen, setModalOpen] = useState(false); // Modal visibility state
+  const [modalContent, setModalContent] = useState({}); // Modal content
 
-  // State to manage search term
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // State to track the current topic
-  const [currentTopic, setCurrentTopic] = useState("Machine Learning");
-
-  // State to track the current question index
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // State to track which questions have been marked as read
-  const [readQuestions, setReadQuestions] = useState([]);
-
-  // State to track achievements
-  const [achievements, setAchievements] = useState([]);
-
-  // State to manage modal visibility
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  // State to manage the content displayed in the modal
-  const [modalContent, setModalContent] = useState({});
-
-  // Fetch questions for the current topic
-  const questions = questionsData[currentTopic] || [];
-
-  // Filter questions based on the search term
+  const questions = currentTopic ? questionsData[currentTopic] : []; // Fetch questions for selected topic
   const filteredQuestions = questions.filter((q) =>
     q.question.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ); // Filter questions based on search term
 
-  // Get the current question based on the index
-  const currentQuestion = filteredQuestions[currentIndex];
+  const currentQuestion = filteredQuestions[currentIndex]; // Get current question
 
-  // Function to toggle Dark Mode
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
+  const toggleDarkMode = () => setDarkMode((prev) => !prev); // Toggle dark mode
 
-  // Function to mark a question as read
   const markAsRead = () => {
     if (!readQuestions.includes(currentIndex)) {
       setReadQuestions((prev) => [...prev, currentIndex]);
 
-      // Check if all questions are marked as read
       if (readQuestions.length + 1 === filteredQuestions.length) {
-        setAchievements((prev) => [...prev, currentTopic]);
+        setAchievements((prev) => [...prev, currentTopic]); // Update achievements
       }
     }
   };
 
-  // Function to open the modal with content
   const openModal = (content) => {
     setModalContent(content);
     setModalOpen(true);
   };
 
-  // Function to close the modal
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  const closeModal = () => setModalOpen(false); // Close modal
 
-  // Function to move to the next question
   const handleNext = () => {
     if (currentIndex < filteredQuestions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     }
   };
 
-  // Function to move to the previous question
   const handleBack = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
     }
   };
 
-  // Function to reset progress and achievements for the current topic
   const resetProgress = () => {
     setReadQuestions([]);
     setAchievements(achievements.filter((ach) => ach !== currentTopic));
   };
 
+  // Handle return to topic selection
+  const returnToTopicSelection = () => {
+    setCurrentTopic(null); // Reset the current topic
+    setCurrentIndex(0); // Reset the question index
+    setReadQuestions([]); // Clear read questions
+  };
+
+  if (!currentTopic) {
+    return (
+      <div className={darkMode ? "app dark-mode" : "app"}>
+        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <main style={{ padding: "20px" }}>
+        <div class="goal-heading-container">
+          <h1 class="goal-heading">Making 'Data' learning exciting & fun</h1>
+        </div>
+          <h1>Choose a Topic</h1>
+          <div className="topic-selection">
+              {Object.keys(questionsData).map((topic) => (
+                <TopicCard
+                  key={topic}
+                  topic={topic}
+                  description={`Learn flashcards on ${topic}`}
+                  onSelectTopic={(selectedTopic) => {
+                    setCurrentTopic(selectedTopic);
+                    setCurrentIndex(0);
+                    setReadQuestions([]); // Reset read questions for the new topic
+                  }}
+                />
+              ))}
+            </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className={darkMode ? "app dark-mode" : "app"}>
-      {/* Header Component with Dark Mode toggle */}
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-
       <main style={{ padding: "20px" }}>
-        {/* Search Bar */}
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-        {/* Topic Selector */}
-        <select
-          value={currentTopic}
-          onChange={(e) => {
-            setCurrentTopic(e.target.value);
-            setCurrentIndex(0);
-            setReadQuestions([]); // Reset read questions when switching topics
-          }}
-          style={{ marginBottom: "20px", padding: "10px" }}
-        >
-          {Object.keys(questionsData).map((topic) => (
-            <option key={topic} value={topic}>
-              {topic}
-            </option>
-          ))}
-        </select>
-
-        {/* Progress Tracker */}
+        <button onClick={returnToTopicSelection} className="back-button">
+          ← Back to Topics
+        </button>
         <ProgressTracker
           completed={readQuestions.length}
           total={filteredQuestions.length}
           isCompleted={readQuestions.length === filteredQuestions.length}
         />
-
-        {/* Achievements Banner */}
         {achievements.includes(currentTopic) && (
           <div className="achievement-banner">
             🎉 Congratulations! You completed {currentTopic} and earned a badge! 🎉
           </div>
         )}
-
-        {/* FlashCard Display */}
         {currentQuestion ? (
           <>
             <FlashCard
               question={currentQuestion.question}
               answer={currentQuestion.answer}
-              company={currentQuestion.company} // Pass the company field
+              company={currentQuestion.company}
               onViewDetails={() => openModal(currentQuestion)}
             />
             <div className="button-container">
-              {/* Back Button */}
               <button onClick={handleBack} disabled={currentIndex === 0}>
                 Back
               </button>
-              {/* Mark as Read Button */}
               <button
                 onClick={markAsRead}
                 className={
-                  readQuestions.includes(currentIndex) ? "completed-button" : "mark-read-button"
+                  readQuestions.includes(currentIndex)
+                    ? "completed-button"
+                    : "mark-read-button"
                 }
                 disabled={readQuestions.includes(currentIndex)}
               >
                 {readQuestions.includes(currentIndex) ? "Completed" : "Mark as Read"}
               </button>
-              {/* Next Button */}
               <button
                 onClick={handleNext}
                 disabled={currentIndex === filteredQuestions.length - 1}
@@ -168,17 +149,11 @@ const App = () => {
         ) : (
           <p>No questions found</p>
         )}
-
-        {/* Reset Progress Button */}
         <button onClick={resetProgress} className="reset-button">
           Reset Progress
         </button>
-
-        {/* Modal Component */}
         <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
       </main>
-
-      {/* Footer Component */}
       <Footer />
     </div>
   );

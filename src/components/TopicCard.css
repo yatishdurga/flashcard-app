@@ -1,0 +1,33 @@
+.topic-card {
+    width: 300px;
+    height: 200px;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .topic-card:hover {
+    transform: scale(1.05);
+    background-color: #e0f7fa;
+  }
+  
+  .topic-card h2 {
+    margin: 0;
+    color: #007bff;
+  }
+  
+  .topic-card p {
+    margin-top: 10px;
+    color: #555;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  

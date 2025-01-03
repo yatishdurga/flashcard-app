@@ -7,12 +7,17 @@ const Modal = ({ isOpen, onClose, content }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-window">
-        <div className="modal-content">
+        <div className="modal-header">
           <h2>Details</h2>
-          <p>{content.question}</p>
-          <p>{content.answer}</p>
+          <button className="modal-close-icon" onClick={onClose}>
+            &times; {/* Close icon */}
+          </button>
         </div>
-        {/* Close button at the bottom left */}
+        <div className="modal-content">
+          <p><strong>Question:</strong> {content.question}</p>
+          <p><strong>Answer:</strong> {content.answer}</p>
+        </div>
+        {/* Close button at the bottom */}
         <button className="modal-close-button" onClick={onClose}>
           Close
         </button>

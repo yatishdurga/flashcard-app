@@ -22,7 +22,35 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Subtle shadow for depth */
   overflow: hidden; /* Prevent content overflow outside the modal */
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* Subtle divider */
+  padding-bottom: 10px;
+}
+
+/* Close Icon */
+.modal-close-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-close-icon:hover {
+  color: #333;
+  transform: scale(1.2); /* Slight zoom effect */
 }
 
 /* Modal Content */
@@ -32,6 +60,9 @@
   margin-top: 10px;
   scroll-behavior: smooth; /* Smooth scrolling */
   flex: 1; /* Take available space */
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
 }
 
 /* Close Button at Bottom Left */

@@ -3,11 +3,21 @@ import './FlashCard.css';
 
 const FlashCard = ({ question, answer, company, onViewDetails }) => {
   const [flipped, setFlipped] = useState(false);
+  const [truncatedAnswer, setTruncatedAnswer] = useState("");
 
   // Reset flipped state when the question changes
   useEffect(() => {
     setFlipped(false);
   }, [question]);
+
+  // Truncate the answer to 2-3 sentences
+  useEffect(() => {
+    const truncateText = (text) => {
+      const sentences = text.split('.'); // Split by periods
+      return sentences.slice(0, 2).join('.') + (sentences.length > 2 ? "..." : "");
+    };
+    setTruncatedAnswer(truncateText(answer));
+  }, [answer]);
 
   return (
     <div
@@ -22,7 +32,7 @@ const FlashCard = ({ question, answer, company, onViewDetails }) => {
 
       {/* Back side */}
       <div className="back">
-        <p>{answer}</p>
+        <p>{truncatedAnswer}</p> {/* Show truncated answer */}
         <button
           onClick={(e) => {
             e.stopPropagation(); // Prevent flipping when clicking the button
