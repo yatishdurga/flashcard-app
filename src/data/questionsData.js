@@ -40,6 +40,24 @@ export const questionsData = {
       { question: "What is the central limit theorem?", answer: "The central limit theorem states that the sampling distribution of the sample mean approaches a normal distribution as the sample size increases.",company: "Netflix" },
       { question: "What is hypothesis testing?", answer: "Hypothesis testing is a statistical method used to determine the validity of a claim or assumption about a population.",company: "Meta" },
       { question: "Define correlation.", answer: "Correlation measures the strength and direction of a linear relationship between two variables.",company: "Apple"  }
-    ]
+    ],
+    "LLM/Agents AI": [
+    {
+      question: "What does LLM stand for?",
+      answer: "LLM stands for Large Language Model.",
+      company: "OpenAI"
+    },
+    {
+      question: "What is a prompt in LLM?",
+      answer: "A prompt is the input text provided to an LLM to generate a response.",
+      company: "AI Agents Co."
+    },
+    {
+      question: "What are AI Agents?",
+      answer: "AI Agents are systems that can perform tasks autonomously using AI.",
+      company: "Future AI"
+    }
+  ]
+
   };
   

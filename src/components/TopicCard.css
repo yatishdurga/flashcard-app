@@ -11,23 +11,59 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
   }
   
+  /* Hover Effect */
   .topic-card:hover {
     transform: scale(1.05);
     background-color: #e0f7fa;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* More prominent shadow on hover */
   }
   
+  /* Active State */
+  .topic-card:active {
+    transform: scale(0.98);
+    background-color: #d1f4f9; /* Slightly darker shade for active state */
+  }
+  
+  /* Topic Title */
   .topic-card h2 {
     margin: 0;
     color: #007bff;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
   
+  /* Topic Description */
   .topic-card p {
     margin-top: 10px;
     color: #555;
     font-size: 0.9rem;
     text-align: center;
+  }
+  
+  /* Responsive Design for Smaller Screens */
+  @media (max-width: 768px) {
+    .topic-card {
+      width: 90%; /* Full width for smaller screens */
+      height: auto;
+    }
+  
+    .topic-card h2 {
+      font-size: 1.3rem; /* Adjust font size for smaller screens */
+    }
+  
+    .topic-card p {
+      font-size: 0.8rem;
+    }
+  }
+  
+  /* Ensure Flexbox Layout for Topic Cards */
+  .topic-selection {
+    display: flex; /* Enable flexbox layout */
+    flex-wrap: wrap; /* Allow wrapping to the next row */
+    justify-content: center; /* Center the cards horizontally */
+    gap: 20px; /* Add space between cards */
   }
   
