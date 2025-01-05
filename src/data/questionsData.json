@@ -1,0 +1,24 @@
+{
+  "QuestionsTable": [
+    {
+      "PutRequest": {
+        "Item": {
+          "topic": { "S": "Machine Learning" },
+          "questionId": { "N": "1" },
+          "question": { "S": "What is supervised learning?" },
+          "answer": { "S": "Supervised learning is a type of ML where the model learns from labeled data." }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "topic": { "S": "Machine Learning" },
+          "questionId": { "N": "2" },
+          "question": { "S": "What is unsupervised learning?" },
+          "answer": { "S": "Unsupervised learning is a type of ML where the model learns from unlabeled data." }
+        }
+      }
+    }
+  ]
+}
