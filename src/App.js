@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { questionsData } from './data/questionsData';
+import React, { useState, useEffect } from 'react';
 import TopicCard from './components/TopicCard'; // Component for displaying topics
 import Header from './components/HeaderFooter/Header'; // Header component
 import Footer from './components/HeaderFooter/Footer'; // Footer component
@@ -10,24 +9,36 @@ import './App.css'; // CSS styling
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false); // State to track dark mode
-  const [searchTerm, setSearchTerm] = useState(""); // State to track search term
   const [currentTopic, setCurrentTopic] = useState(null); // State to track the current topic
+  const [questions, setQuestions] = useState([]); // Questions fetched from the backend
   const [currentIndex, setCurrentIndex] = useState(0); // Index of the current question
   const [readQuestions, setReadQuestions] = useState([]); // List of questions marked as read
   const [achievements, setAchievements] = useState([]); // Topics completed
   const [isModalOpen, setModalOpen] = useState(false); // State for modal visibility
   const [modalContent, setModalContent] = useState({}); // Content to display in the modal
+  const [loading, setLoading] = useState(false); // State for loading status
+  const [error, setError] = useState(null); // State for error handling
 
-  // Get questions for the selected topic or an empty array if no topic is selected
-  const questions = currentTopic ? questionsData[currentTopic] : [];
-
-  // Filter questions based on the search term
-  const filteredQuestions = questions.filter((q) =>
-    q.question.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Current question to display
-  const currentQuestion = filteredQuestions[currentIndex];
+  // Fetch questions from the backend API
+  const fetchQuestions = async (topic) => {
+    setLoading(true); // Show loading indicator
+    setError(null); // Reset error state
+    try {
+      const response = await fetch(`http://localhost:5001/api/questions?topic=${topic}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch questions');
+      }
+      const data = await response.json();
+      setQuestions(data); // Update questions state
+      setCurrentIndex(0); // Reset current index
+      setReadQuestions([]); // Reset progress
+    } catch (err) {
+      console.error(err);
+      setError(err.message); // Set error state
+    } finally {
+      setLoading(false); // Hide loading indicator
+    }
+  };
 
   // Toggle dark mode
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
@@ -37,7 +48,7 @@ const App = () => {
     if (!readQuestions.includes(currentIndex)) {
       setReadQuestions((prev) => [...prev, currentIndex]);
 
-      if (readQuestions.length + 1 === filteredQuestions.length) {
+      if (readQuestions.length + 1 === questions.length) {
         setAchievements((prev) => [...prev, currentTopic]); // Add topic to achievements
       }
     }
@@ -54,7 +65,7 @@ const App = () => {
 
   // Navigate to the next question
   const handleNext = () => {
-    if (currentIndex < filteredQuestions.length - 1) {
+    if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     }
   };
@@ -68,13 +79,14 @@ const App = () => {
 
   // Reset progress for the current topic
   const resetProgress = () => {
-    setReadQuestions([]);
-    setAchievements(achievements.filter((ach) => ach !== currentTopic));
+    setReadQuestions([]); // Clear read questions
+    setAchievements(achievements.filter((ach) => ach !== currentTopic)); // Remove topic from achievements
   };
 
   // Return to topic selection screen
   const returnToTopicSelection = () => {
-    setCurrentTopic(null); // Clear the current topic
+    setCurrentTopic(null); // Clear current topic
+    setQuestions([]); // Clear questions
     setCurrentIndex(0); // Reset question index
     setReadQuestions([]); // Clear read questions
   };
@@ -93,18 +105,19 @@ const App = () => {
           {/* Topic selection section */}
           <h1>Choose a Topic</h1>
           <div className="topic-selection">
-            {Object.keys(questionsData).map((topic) => (
-              <TopicCard
-                key={topic}
-                topic={topic}
-                description={`Learn flashcards on ${topic}`}
-                onSelectTopic={(selectedTopic) => {
-                  setCurrentTopic(selectedTopic);
-                  setCurrentIndex(0);
-                  setReadQuestions([]); // Reset read questions for the new topic
-                }}
-              />
-            ))}
+            {['Machine Learning', 'Deep Learning', 'LLM/Agents AI', 'Stats & Probability'].map(
+              (topic) => (
+                <TopicCard
+                  key={topic}
+                  topic={topic}
+                  description={`Learn flashcards on ${topic}`}
+                  onSelectTopic={(selectedTopic) => {
+                    setCurrentTopic(selectedTopic); // Set the selected topic
+                    fetchQuestions(selectedTopic); // Fetch questions for the topic
+                  }}
+                />
+              )
+            )}
           </div>
         </main>
         <Footer />
@@ -122,63 +135,71 @@ const App = () => {
           ← Back to Topics
         </button>
 
-        {/* Progress tracker */}
-        <ProgressTracker
-          completed={readQuestions.length}
-          total={filteredQuestions.length}
-          isCompleted={readQuestions.length === filteredQuestions.length}
-        />
-
-        {/* Achievement banner */}
-        {achievements.includes(currentTopic) && (
-          <div className="achievement-banner">
-            🎉 Congratulations! You completed {currentTopic} and earned a badge! 🎉
-          </div>
-        )}
-
-        {/* Flashcard display */}
-        {currentQuestion ? (
-          <>
-            <FlashCard
-              question={currentQuestion.question}
-              answer={currentQuestion.answer}
-              company={currentQuestion.company}
-              onViewDetails={() => openModal(currentQuestion)}
-            />
-            <div className="button-container">
-              <button onClick={handleBack} disabled={currentIndex === 0}>
-                Back
-              </button>
-              <button
-                onClick={markAsRead}
-                className={
-                  readQuestions.includes(currentIndex)
-                    ? 'completed-button'
-                    : 'mark-read-button'
-                }
-                disabled={readQuestions.includes(currentIndex)}
-              >
-                {readQuestions.includes(currentIndex) ? 'Completed' : 'Mark as Read'}
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={currentIndex === filteredQuestions.length - 1}
-              >
-                Next
-              </button>
-            </div>
-          </>
+        {loading ? (
+          <p>Loading questions...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
         ) : (
-          <p>No questions found</p>
+          <>
+            {/* Progress tracker */}
+            <ProgressTracker
+              completed={readQuestions.length}
+              total={questions.length}
+              isCompleted={readQuestions.length === questions.length}
+            />
+
+            {/* Achievement banner */}
+            {achievements.includes(currentTopic) && (
+              <div className="achievement-banner">
+                <span role="img" aria-label="celebration">🎉</span> Congratulations! You completed {currentTopic} and earned a badge! <span role="img" aria-label="celebration">🎉</span>
+              </div>
+            )}
+
+            {/* Flashcard display */}
+            {questions[currentIndex] ? (
+              <>
+                <FlashCard
+                  question={questions[currentIndex].Question}
+                  answer={questions[currentIndex].Answer}
+                  company={questions[currentIndex].Company || 'General'}
+                  onViewDetails={() => openModal(questions[currentIndex])}
+                />
+                <div className="button-container">
+                  <button onClick={handleBack} disabled={currentIndex === 0}>
+                    Back
+                  </button>
+                  <button
+                    onClick={markAsRead}
+                    className={
+                      readQuestions.includes(currentIndex)
+                        ? 'completed-button'
+                        : 'mark-read-button'
+                    }
+                    disabled={readQuestions.includes(currentIndex)}
+                  >
+                    {readQuestions.includes(currentIndex) ? 'Completed' : 'Mark as Read'}
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={currentIndex === questions.length - 1}
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p>No questions found</p>
+            )}
+
+            {/* Reset progress button */}
+            <button onClick={resetProgress} className="reset-button">
+              Reset Progress
+            </button>
+
+            {/* Modal component */}
+            <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
+          </>
         )}
-
-        {/* Reset progress button */}
-        <button onClick={resetProgress} className="reset-button">
-          Reset Progress
-        </button>
-
-        {/* Modal component */}
-        <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
       </main>
       <Footer />
     </div>

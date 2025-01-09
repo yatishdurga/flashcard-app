@@ -5,8 +5,9 @@ const ProgressTracker = ({ completed, total, isCompleted }) => {
 
   return (
     <div style={{ margin: "20px 0" }}>
-      <p>Completion: {completed}/{total} ({percentage}%)</p>
-      {isCompleted && <p className="completed-status">🎉 Completed! 🎉</p>}
+      <p className="completed-status">
+  <span role="img" aria-label="completed">🎉</span> Completed! <span role="img" aria-label="celebration">🎉</span>
+    </p>
       <div
         style={{
           width: "50%",
