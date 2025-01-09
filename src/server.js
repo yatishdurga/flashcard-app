@@ -86,6 +86,29 @@ app.get('/questions/:topicName', async (req, res) => {
   }
 });
 
+app.get('/topics', async (req, res) => {
+  try {
+    const dynamoDb = await getDynamoDBClient();
+
+    const params = {
+      TableName: tableName,
+      ProjectionExpression: 'TopicName'
+    };
+
+    const data = await dynamoDb.scan(params).promise();
+    
+    // Extract unique topics
+    const topics = [...new Set(data.Items.map(item => item.TopicName))];
+    
+    res.status(200).json(topics);
+  } catch (err) {
+    console.error('Error fetching topics:', err);
+    res.status(500).json({ 
+      error: 'Failed to fetch topics',
+      details: err.message 
+    });
+  }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

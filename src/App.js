@@ -17,6 +17,9 @@ const App = () => {
   const [achievements, setAchievements] = useState([]); // Topics completed
   const [isModalOpen, setModalOpen] = useState(false); // State for modal visibility
   const [modalContent, setModalContent] = useState({}); // Content to display in the modal
+  // const questionRoutes = require('./server');
+  // app.use('/api', questionRoutes);
+
 
   // Get questions for the selected topic or an empty array if no topic is selected
   const questions = currentTopic ? questionsData[currentTopic] : [];
