@@ -29,33 +29,33 @@ sts.assumeRole(assumeRoleParams, function(err, data) {
       credentials: new AWS.Credentials(credentials)
     });
 
-    // // Example: Query the DynamoDB table for a specific question
-    // const queryParams = {
-    //   TableName: 'Questionstable', // Replace with your table name
-    //   KeyConditionExpression: 'TopicName = :topic and QuestionID = :qid',
-    //   ExpressionAttributeValues: {
-    //     ':topic': 'Machine Learning', // The topic to query
-    //     ':qid': '1' // The QuestionID to query
-    //   }
-    // };
+    // Example: Query the DynamoDB table for a specific question
+    const queryParams = {
+      TableName: 'Questionstable', // Replace with your table name
+      KeyConditionExpression: 'TopicName = :topic and QuestionID = :qid',
+      ExpressionAttributeValues: {
+        ':topic': 'Machine Learning', // The topic to query
+        ':qid': '1' // The QuestionID to query
+      }
+    };
 
-    // // Perform the query
-    // dynamoDB.query(queryParams, function(err, data) {
-    //   if (err) {
-    //     console.error("Error querying DynamoDB:", err);
-    //   } else {
-    //     console.log("Query results:", data.Items);
-    //   }
-    // });
+    // Perform the query
+    dynamoDB.query(queryParams, function(err, data) {
+      if (err) {
+        console.error("Error querying DynamoDB:", err);
+      } else {
+        console.log("Query results:", data.Items);
+      }
+    });
 
 
     const newItem = {
       TableName: 'Questionstable', // Replace with your table name
       Item: {
-        TopicName: 'Machine Learning', // Partition key
-        QuestionID: '3', // Sort key
-        Question: 'What is reinforcement learning?',
-        Answer: 'Reinforcement learning involves learning from interactions with an environment to maximize a cumulative reward.',
+        TopicName: 'Statistics', // Partition key
+        QuestionID: '4', // Sort key
+        Question: 'What is p value?',
+        Answer: 'p-value is the probability of observing test result as extreme as what has been observed given the null hypothesis is correct',
       }
     };
 
