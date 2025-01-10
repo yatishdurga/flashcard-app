@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TopicCard from './components/TopicCard'; // Component for displaying topics
 import Header from './components/HeaderFooter/Header'; // Header component
 import Footer from './components/HeaderFooter/Footer'; // Footer component
@@ -19,90 +19,82 @@ const App = () => {
   const [loading, setLoading] = useState(false); // State for loading status
   const [error, setError] = useState(null); // State for error handling
 
-  // Fetch questions from the backend API
   const fetchQuestions = async (topic) => {
-    setLoading(true); // Show loading indicator
-    setError(null); // Reset error state
+    setLoading(true);
+    setError(null);
     try {
-      const response = await fetch(`http://localhost:5001/api/questions?topic=${topic}`);
+      const response = await fetch(`http://localhost:3002/questions/${topic}`);
       if (!response.ok) {
         throw new Error('Failed to fetch questions');
       }
       const data = await response.json();
-      setQuestions(data); // Update questions state
-      setCurrentIndex(0); // Reset current index
-      setReadQuestions([]); // Reset progress
+      const formattedQuestions = data.map((item) => ({
+        question: item.Question.S,
+        answer: item.Answer.S,
+        topicName: item.TopicName.S,
+        questionId: item.QuestionID.S,
+      }));
+      setQuestions(formattedQuestions);
+      setCurrentIndex(0);
+      setReadQuestions([]);
     } catch (err) {
-      console.error(err);
-      setError(err.message); // Set error state
+      console.error('Error fetching questions:', err);
+      setError(err.message);
     } finally {
-      setLoading(false); // Hide loading indicator
+      setLoading(false);
     }
   };
 
-  // Toggle dark mode
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
-  // Mark a question as read and update achievements if all are read
   const markAsRead = () => {
     if (!readQuestions.includes(currentIndex)) {
       setReadQuestions((prev) => [...prev, currentIndex]);
-
       if (readQuestions.length + 1 === questions.length) {
-        setAchievements((prev) => [...prev, currentTopic]); // Add topic to achievements
+        setAchievements((prev) => [...prev, currentTopic]);
       }
     }
   };
 
-  // Open the modal with content
   const openModal = (content) => {
     setModalContent(content);
     setModalOpen(true);
   };
 
-  // Close the modal
   const closeModal = () => setModalOpen(false);
 
-  // Navigate to the next question
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     }
   };
 
-  // Navigate to the previous question
   const handleBack = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
     }
   };
 
-  // Reset progress for the current topic
   const resetProgress = () => {
-    setReadQuestions([]); // Clear read questions
-    setAchievements(achievements.filter((ach) => ach !== currentTopic)); // Remove topic from achievements
+    setReadQuestions([]);
+    setAchievements(achievements.filter((ach) => ach !== currentTopic));
   };
 
-  // Return to topic selection screen
   const returnToTopicSelection = () => {
-    setCurrentTopic(null); // Clear current topic
-    setQuestions([]); // Clear questions
-    setCurrentIndex(0); // Reset question index
-    setReadQuestions([]); // Clear read questions
+    setCurrentTopic(null);
+    setQuestions([]);
+    setCurrentIndex(0);
+    setReadQuestions([]);
   };
 
-  // Render topic selection screen if no topic is selected
   if (!currentTopic) {
     return (
       <div className={darkMode ? 'app dark-mode' : 'app'}>
         <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         <main style={{ padding: '20px' }}>
-          {/* Motivational heading */}
           <div className="goal-heading-container">
             <h1 className="goal-heading">Making 'Data' learning exciting & fun</h1>
           </div>
-
-          {/* Topic selection section */}
           <h1>Choose a Topic</h1>
           <div className="topic-selection">
             {['Machine Learning', 'Deep Learning', 'LLM/Agents AI', 'Stats & Probability'].map(
@@ -112,8 +104,8 @@ const App = () => {
                   topic={topic}
                   description={`Learn flashcards on ${topic}`}
                   onSelectTopic={(selectedTopic) => {
-                    setCurrentTopic(selectedTopic); // Set the selected topic
-                    fetchQuestions(selectedTopic); // Fetch questions for the topic
+                    setCurrentTopic(selectedTopic);
+                    fetchQuestions(selectedTopic);
                   }}
                 />
               )
@@ -125,43 +117,35 @@ const App = () => {
     );
   }
 
-  // Render flashcards for the selected topic
   return (
     <div className={darkMode ? 'app dark-mode' : 'app'}>
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <main style={{ padding: '20px' }}>
-        {/* Back button to return to topic selection */}
         <button onClick={returnToTopicSelection} className="back-button">
           ← Back to Topics
         </button>
-
         {loading ? (
           <p>Loading questions...</p>
         ) : error ? (
           <p>Error: {error}</p>
         ) : (
           <>
-            {/* Progress tracker */}
             <ProgressTracker
               completed={readQuestions.length}
               total={questions.length}
               isCompleted={readQuestions.length === questions.length}
             />
-
-            {/* Achievement banner */}
             {achievements.includes(currentTopic) && (
               <div className="achievement-banner">
                 <span role="img" aria-label="celebration">🎉</span> Congratulations! You completed {currentTopic} and earned a badge! <span role="img" aria-label="celebration">🎉</span>
               </div>
             )}
-
-            {/* Flashcard display */}
             {questions[currentIndex] ? (
               <>
                 <FlashCard
-                  question={questions[currentIndex].Question}
-                  answer={questions[currentIndex].Answer}
-                  company={questions[currentIndex].Company || 'General'}
+                  question={questions[currentIndex].question}
+                  answer={questions[currentIndex].answer}
+                  company="General"
                   onViewDetails={() => openModal(questions[currentIndex])}
                 />
                 <div className="button-container">
@@ -190,13 +174,9 @@ const App = () => {
             ) : (
               <p>No questions found</p>
             )}
-
-            {/* Reset progress button */}
             <button onClick={resetProgress} className="reset-button">
               Reset Progress
             </button>
-
-            {/* Modal component */}
             <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
           </>
         )}

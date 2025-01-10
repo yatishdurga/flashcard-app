@@ -1,73 +1,114 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+// Import required modules
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { STSClient, AssumeRoleCommand } = require('@aws-sdk/client-sts');
+const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
 
+// Initialize the app
 const app = express();
+const port = 3002;
 
-// Use environment variable or default port 5000
-const port = process.env.PORT || 5001;
-
-// Enable CORS to allow requests from the frontend
+// Middleware
 app.use(cors());
+app.use(bodyParser.json());
 
-// Middleware for parsing JSON requests
-app.use(express.json());
+// Define AWS SDK v3 clients
+const stsClient = new STSClient({ region: 'us-east-2' });
 
-// MongoDB connection URL
-const mongoURI = "mongodb://127.0.0.1:27017/flashcardDB"; // Update with your local MongoDB database name
-
-// Connect to MongoDB
-mongoose
-  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Error connecting to MongoDB:", err));
-
-// Mongoose Schema and Model
-const QuestionSchema = new mongoose.Schema({
-  topic: String,
-  question: String,
-  answer: String,
-  company: String,
-});
-
-const Question = mongoose.model("Question", QuestionSchema);
-
-// API endpoint to fetch questions by topic
-app.get("/api/questions", async (req, res) => {
-  const { topic } = req.query;
-
-  if (!topic) {
-    return res.status(400).json({ error: "Topic is required" });
-  }
+// Function to get DynamoDB client with assumed role
+const getDynamoDBClient = async () => {
+  const assumeRoleParams = {
+    RoleArn: 'arn:aws:iam::329599627007:role/Nischal', // Role ARN
+    RoleSessionName: 'CrossAccountSession',
+  };
 
   try {
-    const questions = await Question.find({ topic }).exec();
-    res.json(questions);
+    const data = await stsClient.send(new AssumeRoleCommand(assumeRoleParams));
+    const credentials = {
+      accessKeyId: data.Credentials.AccessKeyId,
+      secretAccessKey: data.Credentials.SecretAccessKey,
+      sessionToken: data.Credentials.SessionToken,
+    };
+
+    return new DynamoDBClient({
+      region: 'us-east-2',
+      credentials,
+    });
   } catch (err) {
-    console.error("Error fetching questions:", err);
-    res.status(500).json({ error: "Failed to fetch questions" });
+    console.error('Error assuming role:', err);
+    throw err;
+  }
+};
+
+// Define the table name
+const tableName = 'Questionstable';
+
+// Add a health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Server is running' });
+});
+
+// Get all questions for a specific topic
+app.get('/questions/:topicName', async (req, res) => {
+  let { topicName } = req.params;
+
+  console.log(`Received topic name: ${topicName}`); // Log the raw topic name
+
+  if (!topicName) {
+    return res.status(400).json({ error: 'Topic name is required' });
+  }
+
+  topicName = topicName.trim(); // Remove any leading/trailing whitespace or newlines
+
+  console.log(`Trimmed topic name: ${topicName}`); // Log the trimmed topic name
+
+  try {
+    const dynamoDbClient = await getDynamoDBClient();
+    const params = {
+      TableName: tableName,
+      KeyConditionExpression: 'TopicName = :topicName',
+      ExpressionAttributeValues: {
+        ':topicName': { S: topicName },
+      },
+    };
+
+    console.log('Querying DynamoDB with params:', JSON.stringify(params, null, 2)); // Log query parameters
+
+    const command = new QueryCommand(params);
+    const data = await dynamoDbClient.send(command);
+
+    console.log('DynamoDB query result:', JSON.stringify(data.Items, null, 2)); // Log the full query result
+
+    if (!data.Items || data.Items.length === 0) {
+      return res.status(404).json({ error: 'No questions found for the topic' });
+    }
+
+    res.status(200).json(data.Items);
+  } catch (err) {
+    console.error('Error querying DynamoDB:', err); // Log the error
+    res.status(500).json({
+      error: 'Failed to fetch questions',
+      details: err.message,
+    });
   }
 });
 
-// API endpoint to add a question (optional, for testing purposes)
-app.post("/api/questions", async (req, res) => {
-  const { topic, question, answer, company } = req.body;
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    error: 'Something broke!',
+    details: err.message,
+  });
+});
 
-  if (!topic || !question || !answer) {
-    return res.status(400).json({ error: "Topic, question, and answer are required" });
-  }
-
-  try {
-    const newQuestion = new Question({ topic, question, answer, company });
-    await newQuestion.save();
-    res.status(201).json({ message: "Question added successfully", question: newQuestion });
-  } catch (err) {
-    console.error("Error adding question:", err);
-    res.status(500).json({ error: "Failed to add question" });
-  }
+// Handle 404 errors
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
 });
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
