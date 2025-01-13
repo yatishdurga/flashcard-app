@@ -2,7 +2,7 @@ import React from 'react';
 import './HeaderFooter.css'; // Import the necessary styles
 import logo from '../HeaderFooter/download.png'; // Import the logo image
 
-const Header = ({ darkMode, toggleDarkMode }) => {
+const Header = ({ darkMode, toggleDarkMode, isAuthenticated }) => {
   return (
     <header className="header">
       {/* Logo Section */}
@@ -13,9 +13,12 @@ const Header = ({ darkMode, toggleDarkMode }) => {
 
       {/* Header Actions Section */}
       <div className="header-actions">
-        {/* Login/Signup Buttons */}
-        <button className="auth-button login-button">Login</button>
-        <button className="auth-button signup-button">Sign Up</button>
+        {!isAuthenticated && (
+          <>
+            <button className="auth-button login-button">Login</button>
+            <button className="auth-button signup-button">Sign Up</button>
+          </>
+        )}
 
         {/* Dark Mode Toggle Button */}
         <button onClick={toggleDarkMode} className="dark-mode-toggle">

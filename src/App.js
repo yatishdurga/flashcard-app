@@ -46,7 +46,8 @@ const App = () => {
       }));
       setQuestions(formattedQuestions);
       setCurrentIndex(0);
-      setReadQuestions([]);
+      const savedReadQuestions = JSON.parse(localStorage.getItem(`readQuestions_${topic}`)) || [];
+      setReadQuestions(savedReadQuestions);
     } catch (err) {
       console.error("Error fetching questions:", err);
       setError(err.message);
@@ -59,8 +60,10 @@ const App = () => {
 
   const markAsRead = () => {
     if (!readQuestions.includes(currentIndex)) {
-      setReadQuestions((prev) => [...prev, currentIndex]);
-      if (readQuestions.length + 1 === questions.length) {
+      const updatedReadQuestions = [...readQuestions, currentIndex];
+      setReadQuestions(updatedReadQuestions);
+      localStorage.setItem(`readQuestions_${currentTopic}`, JSON.stringify(updatedReadQuestions));
+      if (updatedReadQuestions.length === questions.length) {
         setAchievements((prev) => [...prev, currentTopic]);
       }
     }
@@ -88,6 +91,7 @@ const App = () => {
   const resetProgress = () => {
     setReadQuestions([]);
     setAchievements(achievements.filter((ach) => ach !== currentTopic));
+    localStorage.removeItem(`readQuestions_${currentTopic}`);
   };
 
   const returnToTopicSelection = () => {
@@ -108,7 +112,7 @@ const App = () => {
   if (auth.isAuthenticated) {
     return (
       <div className={darkMode ? "app dark-mode" : "app"}>
-        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} isAuthenticated={auth.isAuthenticated} />
         <main style={{ padding: "20px" }}>
         <pre> Hello: {auth.user?.profile.user} </pre>
           <button onClick={() => auth.removeUser()}>Sign out</button>
