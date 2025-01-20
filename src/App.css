@@ -1,5 +1,18 @@
 /* General Body Styling */
 
+/* App.css */
+@keyframes gradientBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-background {
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd, #c2e9fb);
+  background-size: 300% 300%;
+  animation: gradientBackground 15s ease infinite;
+}
+
 .category-selection {
   display: flex;
   gap: 10px;
@@ -36,8 +49,8 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin: 20px 0;
-  padding: 10px;
+  margin: 40px 0;
+  padding: 40px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -146,7 +159,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  margin: 0;
+  margin: 50px;
   padding: 0;
   background-color: #f4f4f4;
   transition: background-color 0.3s ease, color 0.3s ease;

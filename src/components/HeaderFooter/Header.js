@@ -1,4 +1,5 @@
 import React from "react";
+import image from "./download.png"; // Ensure the image path is correct
 import "./HeaderFooter.css"; // Ensure the CSS file exists and is updated
 
 const Header = ({ darkMode, toggleDarkMode, signOut, signOutRedirect }) => {
@@ -7,7 +8,7 @@ const Header = ({ darkMode, toggleDarkMode, signOut, signOutRedirect }) => {
       {/* Left Section: Logo and Website Name */}
       <div className="header-left">
         <img
-          src="" // Replace with your logo URL
+          src={image} // Use the imported image variable
           alt="Logo"
           className="header-logo"
         />

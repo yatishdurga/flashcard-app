@@ -4,10 +4,12 @@ import TopicCard from "./components/TopicCard"; // Component for displaying topi
 import Header from "./components/HeaderFooter/Header.js"; // Header component
 import Footer from "./components/HeaderFooter/Footer"; // Footer component
 import FlashCard from "./components/FlashCard"; // Flashcard component for questions
+import SuccessStories from "./components/SuccessStories.js";
 import ProgressTracker from "./components/ProgressTracker"; // Tracks progress
 import Modal from "./components/Modal"; // Modal for additional details
 import InfoCard from "./components/InfoCard.js"; // InfoCard component for overview
 import { FaRobot, FaChartBar, FaFlask, FaBrain } from "react-icons/fa"; // Import icons
+
 
 import "./App.css"; // CSS styling
 
@@ -157,7 +159,10 @@ const App = () => {
                   </div>
                 ))}
               </div>
+              {/* Add Success Stories Below */}
+              <SuccessStories />
             </>
+
           ) : !currentTopic ? (
             <>
               <button onClick={returnToCategorySelection} className="back-button">
@@ -176,6 +181,7 @@ const App = () => {
                 />
               </div>
             </>
+            
           ) : (
             <>
               <button onClick={returnToTopicSelection} className="back-button">
@@ -244,7 +250,6 @@ const App = () => {
       </div>
     );
   }
-
   return (
     <div>
       <h1>Welcome to the Flashcard App</h1>

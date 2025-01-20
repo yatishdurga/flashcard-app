@@ -1,14 +1,26 @@
 /* Header Styling */
 /* Header Styles */
+/* CSS for the fixed header */
 .header {
+  position: fixed; /* Ensures the header stays fixed at the top */
+  top: 0; /* Aligns the header to the very top of the page */
+  left: 110px; /* Aligns the header to the left edge */
+  right: 0; /* Aligns the header to the right edge */
+  z-index: 20; /* Ensures the header stays above other elements */
+  height: 50px; /* Set the height of the header */
+  width: 150%; /* Ensures the header spans the entire width of the page */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 20px; /* Adds padding inside the header */
   background-color: #2c2c2c; /* Dark background */
   color: #ffffff; /* Text color */
-  border-bottom: 2px solid #444;
-  border-radius: 15px;
+  border-bottom: 2px solid #444; /* Adds a border at the bottom */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+}
+body {
+  margin: 0;
+  padding-top: 50px; /* Matches the header height */
 }
 
 /* Logo and Website Name */
@@ -209,14 +221,22 @@
 
 /* Footer Styling */
 .footer {
+  position: fixed; /* Fixes the footer position */
+  bottom: 0; /* Positions the footer at the bottom of the page */
+  left: 0; /* Ensures the footer spans from the left edge */
+  width: 100%; /* Ensures the footer spans the full width of the page */
+  margin: 0; /* Removes any default margins */
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #333;
-  color: white;
-  margin-top: 20px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #333, #444); /* Gradient background */
+  color: white; /* Text color */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Drop shadow */
+  border-top: 2px solid #555; /* Top border */
+  font-family: 'Arial', sans-serif; /* Font style */
+  font-size: 14px; /* Font size */
+  text-align: center; /* Center text */
 }
 
 .social-media {
