@@ -12,7 +12,6 @@ const port = 3002;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-
 // Define AWS SDK v3 clients
 const stsClient = new STSClient({ region: 'us-east-2' });
 

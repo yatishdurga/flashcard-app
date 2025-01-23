@@ -21,7 +21,7 @@ const App = () => {
   const [error, setError] = useState(null); // State for error handling
 
   const auth = useAuth(); // Cognito Authentication Hook
-
+  
   const signOutRedirect = () => {
     const clientId = "43v2nn87ore0j9a9502s5130k"; // Replace with your App Client ID
     const logoutUri = "http://localhost:3000"; // Replace with your redirect URI
