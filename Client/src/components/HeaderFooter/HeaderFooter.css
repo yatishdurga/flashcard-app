@@ -1,6 +1,153 @@
 /* Header Styling */
+/* Header Styles */
+/* CSS for the fixed header */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  width: 100%; /* Ensure the header spans full width */
+  margin: 0; /* Remove any default margin */
+  padding: 0 20px; /* Adjust padding to keep some space for content inside the header */
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  background-color: #2c2c2c; /* Header background color */
+  color: #ffffff; /* Text color */
+  border-bottom: 2px solid #444;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+.container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Logo and Website Name */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.website-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Right Section: Buttons */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between buttons */
+}
+
+.action-btn {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark Mode Button */
+.light-mode {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.dark-mode {
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+/* Sign Out Buttons */
+.signout-btn,
+.signout-redirect-btn {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+.signout-btn:hover,
+.signout-redirect-btn:hover {
+  background-color: #e60000;
+}
+
+
+/* Left Section: Logo and Website Name */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.website-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Right Section: Buttons */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: 2px solid white;
+  border-radius: 20px;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.action-btn:hover {
+  background: white;
+  color: #2d2d2d;
+}
+
+/* Dark Mode and Light Mode Specific Styles */
+.dark-mode {
+  background: white;
+  color: #2d2d2d;
+}
+
+.light-mode {
+  background: transparent;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .website-name {
+    font-size: 16px;
+  }
+
+  .action-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }
 
 /* Logo */
@@ -79,14 +226,22 @@
 
 /* Footer Styling */
 .footer {
+  position: fixed; /* Fixes the footer position */
+  bottom: 0; /* Positions the footer at the bottom of the page */
+  left: 0; /* Ensures the footer spans from the left edge */
+  width: 100%; /* Ensures the footer spans the full width of the page */
+  margin: 0; /* Removes any default margins */
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #333;
-  color: white;
-  margin-top: 20px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #333, #444); /* Gradient background */
+  color: white; /* Text color */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Drop shadow */
+  border-top: 2px solid #555; /* Top border */
+  font-family: 'Arial', sans-serif; /* Font style */
+  font-size: 14px; /* Font size */
+  text-align: center; /* Center text */
 }
 
 .social-media {

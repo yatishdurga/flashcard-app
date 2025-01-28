@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { useAuth } from "react-oidc-context";
 import TopicCard from "./components/TopicCard"; // Component for displaying topics
-import Header from "./components/HeaderFooter/Header"; // Header component
+import Header from "./components/HeaderFooter/Header.js"; // Header component
 import Footer from "./components/HeaderFooter/Footer"; // Footer component
 import FlashCard from "./components/FlashCard"; // Flashcard component for questions
+import SuccessStories from "./components/SuccessStories.js";
 import ProgressTracker from "./components/ProgressTracker"; // Tracks progress
 import Modal from "./components/Modal"; // Modal for additional details
+import InfoCard from "./components/InfoCard.js"; // InfoCard component for overview
+import { FaRobot, FaChartBar, FaFlask, FaBrain } from "react-icons/fa"; // Import icons
+
+
 import "./App.css"; // CSS styling
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false); // State to track dark mode
+  const [currentCategory, setCurrentCategory] = useState(null); // State to track the current category
   const [currentTopic, setCurrentTopic] = useState(null); // State to track the current topic
   const [questions, setQuestions] = useState([]); // Questions fetched from the backend
   const [currentIndex, setCurrentIndex] = useState(0); // Index of the current question
@@ -21,7 +27,15 @@ const App = () => {
   const [error, setError] = useState(null); // State for error handling
 
   const auth = useAuth(); // Cognito Authentication Hook
-  
+
+  // List of categories with associated icons
+  const categories = [
+    { name: "Machine Learning", icon: <FaBrain /> },
+    { name: "Deep Learning", icon: <FaFlask /> },
+    { name: "LLM/Agents AI", icon: <FaRobot /> },
+    { name: "Stats & Probability", icon: <FaChartBar /> },
+  ];
+
   const signOutRedirect = () => {
     const clientId = "43v2nn87ore0j9a9502s5130k"; // Replace with your App Client ID
     const logoutUri = "http://localhost:3000"; // Replace with your redirect URI
@@ -29,6 +43,7 @@ const App = () => {
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
   };
 
+  // Fetch questions based on the topic
   const fetchQuestions = async (topic) => {
     setLoading(true);
     setError(null);
@@ -94,6 +109,14 @@ const App = () => {
     localStorage.removeItem(`readQuestions_${currentTopic}`);
   };
 
+  const returnToCategorySelection = () => {
+    setCurrentCategory(null);
+    setCurrentTopic(null);
+    setQuestions([]);
+    setCurrentIndex(0);
+    setReadQuestions([]);
+  };
+
   const returnToTopicSelection = () => {
     setCurrentTopic(null);
     setQuestions([]);
@@ -114,32 +137,51 @@ const App = () => {
       <div className={darkMode ? "app dark-mode" : "app"}>
         <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} isAuthenticated={auth.isAuthenticated} />
         <main style={{ padding: "20px" }}>
-        <pre> Hello: {auth.user?.profile.user} </pre>
+          <pre> Hello: {auth.user?.profile.email || "User"} </pre>
           <button onClick={() => auth.removeUser()}>Sign out</button>
           <button onClick={() => signOutRedirect()}>Sign out (Redirect)</button>
 
-          {!currentTopic ? (
+          {/* Category Selection */}
+          {!currentCategory ? (
             <>
-              <div className="goal-heading-container">
-                <h1 className="goal-heading">Making 'Data' learning exciting & fun</h1>
+              <InfoCard />
+
+              <h1>Categories</h1>
+              <div className="category-selection">
+                {categories.map((category) => (
+                  <div
+                    key={category.name}
+                    className="category-card"
+                    onClick={() => setCurrentCategory(category.name)}
+                  >
+                    <span className="category-icon">{category.icon}</span>
+                    {category.name}
+                  </div>
+                ))}
               </div>
-              <h1>Choose a Topic</h1>
+              {/* Add Success Stories Below */}
+              <SuccessStories />
+            </>
+
+          ) : !currentTopic ? (
+            <>
+              <button onClick={returnToCategorySelection} className="back-button">
+                ← Back to Categories
+              </button>
+              <h1>Topics under {currentCategory}</h1>
               <div className="topic-selection">
-                {["Machine Learning", "Deep Learning", "LLM/Agents AI", "Stats & Probability"].map(
-                  (topic) => (
-                    <TopicCard
-                      key={topic}
-                      topic={topic}
-                      description={`Learn flashcards on ${topic}`}
-                      onSelectTopic={(selectedTopic) => {
-                        setCurrentTopic(selectedTopic);
-                        fetchQuestions(selectedTopic);
-                      }}
-                    />
-                  )
-                )}
+                <TopicCard
+                  key={currentCategory}
+                  topic={currentCategory}
+                  description={`Learn flashcards on ${currentCategory}`}
+                  onSelectTopic={(selectedTopic) => {
+                    setCurrentTopic(selectedTopic);
+                    fetchQuestions(selectedTopic);
+                  }}
+                />
               </div>
             </>
+            
           ) : (
             <>
               <button onClick={returnToTopicSelection} className="back-button">
@@ -208,7 +250,6 @@ const App = () => {
       </div>
     );
   }
-
   return (
     <div>
       <h1>Welcome to the Flashcard App</h1>

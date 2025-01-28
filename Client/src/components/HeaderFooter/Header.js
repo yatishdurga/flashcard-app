@@ -1,28 +1,36 @@
-import React from 'react';
-import './HeaderFooter.css'; // Import the necessary styles
-import logo from '../HeaderFooter/download.png'; // Import the logo image
+import React from "react";
+import image from "./download.png"; // Ensure the image path is correct
+import "./HeaderFooter.css"; // Ensure the CSS file exists and is updated
 
-const Header = ({ darkMode, toggleDarkMode, isAuthenticated }) => {
+const Header = ({ darkMode, toggleDarkMode, signOut, signOutRedirect }) => {
   return (
     <header className="header">
-      {/* Logo Section */}
-      <div className="logo">
-        <img src={logo} alt="DataScience Prep Logo" className="logo-image" />
-        <h2>DataScience Prep</h2> {/* Placeholder logo text */}
+      {/* Left Section: Logo and Website Name */}
+      <div className="header-left">
+        <img
+          src={image} // Use the imported image variable
+          alt="Logo"
+          className="header-logo"
+        />
+        <h1 className="website-name">Data Science Prep</h1>
       </div>
 
-      {/* Header Actions Section */}
-      <div className="header-actions">
-        {!isAuthenticated && (
-          <>
-            <button className="auth-button login-button">Login</button>
-            <button className="auth-button signup-button">Sign Up</button>
-          </>
-        )}
-
-        {/* Dark Mode Toggle Button */}
-        <button onClick={toggleDarkMode} className="dark-mode-toggle">
-          {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
+      {/* Right Section: Action Buttons */}
+      <div className="header-right">
+        <button
+          onClick={toggleDarkMode}
+          className={`action-btn ${darkMode ? "dark-mode" : "light-mode"}`}
+        >
+          {darkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+        <button onClick={signOut} className="action-btn signout-btn">
+          Sign Out
+        </button>
+        <button
+          onClick={signOutRedirect}
+          className="action-btn signout-redirect-btn"
+        >
+          Sign Out (Redirect)
         </button>
       </div>
     </header>
